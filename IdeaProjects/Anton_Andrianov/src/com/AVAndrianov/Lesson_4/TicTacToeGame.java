@@ -7,8 +7,8 @@ import java.io.InputStreamReader;
 public class TicTacToeGame {
     private String personName = "Anton";
     private String computerName = "Computer";
-    private int column = 5;
-    private int row = 5;
+    private int column = 8;
+    private int row = 8;
     private int crossOut = 4;  //Необходимое количество X или O в ряд, для победы
     private String DOT = "•";
     private String CROSS = "X";
@@ -241,40 +241,65 @@ public class TicTacToeGame {
     }
 
     private int[] aiSidelineCheck() {
-        int[] coordinates = {0, 0};
+        int[] coordinates = {0, 0, 0};
         int a = 0;
         int b = 0;
-        for (int j = 0; j < field[0].length; j++) {
-            for (int i = 0; i < field.length - 1 - j; i++) {
+        int numberFreeCell = 0;
+        int numberOfNudes = 0;
+        int maxNumberOfNudes = 0;
+        for (int i = 0; i < field.length - 2; i++) {
+            for (int j = 0; j < field[0].length - 1 - i; j++) {
                 // По диогонали с лева на право, вверх
-                if (!field[i + 1][i + 1 + j].equals(CROSS)) {
-                    a++;
-                    if (field[i + 1][i + 1 + j].equals(DOT)) {
-                        coordinates[0] = i + 1;
-                        coordinates[1] = i + j + 1;
+                if (!field[j + 1][j + 1 + i].equals(CROSS)) {
+                    numberFreeCell++;
+                    if (field[j + 1][j + 1 + i].equals(NAUGHT)) {
+                        numberOfNudes++;
                     }
-                    if (a == 4) {
+                    if (field[j + 1][i + 1 + i].equals(DOT)) {
+                        coordinates[0] = j + 1;
+                        coordinates[1] = j + i + 1;
+                        coordinates[2] = numberOfNudes;
+                    }
+                    if (numberFreeCell >= crossOut && numberOfNudes > 0) {
                         return coordinates;
                     }
                 } else {
-                    a = 0;
+                    numberFreeCell = 0;
+                    numberOfNudes = 0;
+                    coordinates[0] = 0;
+                    coordinates[1] = 0;
                 }
-                // По диогонали с лева на право, вниз
-                if (!field[i + 1 + j][i + 1].equals(CROSS)) {
-                    b++;
-                    if (field[i + 1 + j][i + 1].equals(DOT)) {
-                        coordinates[0] = i + 1 + j;
-                        coordinates[1] = i + 1;
-                    }
-                    if (b == 4) {
-                        return coordinates;
-                    }
-                } else {
-                    b = 0;
-                }
+//                if (!field[i + 1][i + 1 + j].equals(CROSS)) {
+//                    a++;
+//                    if (field[i + 1][i + 1 + j].equals(DOT)) {
+//                        coordinates[0] = i + 1;
+//                        coordinates[1] = i + j + 1;
+//                    }
+//                    if (a == 4) {
+//                        return coordinates;
+//                    }
+//                } else {
+//                    a = 0;
+//                }
+//
+//                // По диогонали с лева на право, вниз
+//                if (field[i + 1 + j][i + 1].equals(NAUGHT)) {
+//                    numberOfNudes++;
+//                    if (numberOfNudes > 0 && !field[i + 1 + j][i + 1].equals(NAUGHT) && numberOfNudes > coordinates[2]) {
+//                        coordinates[0] = i + 1 + j;
+//                        coordinates[1] = i + 1;
+//                        coordinates[2] = numberOfNudes;
+//                    }
+//                    if (b == 4) {
+//                        return coordinates;
+//                    }
+//                } else {
+//                    numberOfNudes = 0;
+//
+//                }
             }
-            a = 0;
-            b = 0;
+            numberOfNudes = 0;
+            numberFreeCell = 0;
         }
         return coordinates;
     }
